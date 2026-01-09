@@ -1,18 +1,18 @@
 modules:
   jira:issuePanel:
-    - key: tse-precheck
+    - key: Ticket_Triage
       resource: main
       resolver:
         function: resolver
       render: native
-      title: TSE Pre-check
+      title: TSE Ticket Triage
       icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
   function:
     - key: resolver
       handler: index.handler
 resources:
   - key: main
-    path: src/frontend/index.jsx
+    path: src/frontend/App.jsx
     # - key: onCreate
     #   handler: index.onCreate
 app:
@@ -21,6 +21,7 @@ app:
     memoryMB: 256
     architecture: arm64
   id: ari:cloud:ecosystem::app/def4f801-effa-4044-be6a-ae75ae93f23b
+
 
 permissions:
   scopes:
