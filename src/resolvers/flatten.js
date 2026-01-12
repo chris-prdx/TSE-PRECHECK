@@ -8,7 +8,6 @@ export function flattenAdf(nodes) {
 
     switch (node.type) {
       case 'text': {
-        // Keep visible text only
         append(node.text || '');
         return;
       }
@@ -28,10 +27,8 @@ export function flattenAdf(nodes) {
         let idx = node.attrs?.order ?? 1;
 
         (node.content || []).forEach((listItem) => {
-          // One line per list item
           append(`${idx}. `);
           walk(listItem);
-          // Ensure list item ends with newline
           if (!output.endsWith('\n')) append('\n');
           idx += 1;
         });
@@ -48,13 +45,12 @@ export function flattenAdf(nodes) {
       }
 
       case 'listItem': {
-        // A listItem usually contains paragraphs
         (node.content || []).forEach(walk);
         return;
       }
 
       default: {
-        // Fallback: recurse into nested content
+        // recursively walk the content for nested
         (node.content || []).forEach(walk);
       }
     }
@@ -62,7 +58,7 @@ export function flattenAdf(nodes) {
 
   (nodes || []).forEach(walk);
 
-  // whitespace normalization
+  // whitespace removal
   console.log("OUTPUT", output)
   return output
     .replace(/\r\n/g, '\n')

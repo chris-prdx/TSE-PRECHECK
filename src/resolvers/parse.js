@@ -23,14 +23,13 @@ export function parseSections(flatText, fields) {
     const line = rawLine.trim();
 
     if (!line && currentField) {
-      // keep paragraph breaks inside a section
       if (sections[currentField] && !sections[currentField].endsWith('\n')) {
         sections[currentField] += '\n';
       }
       continue;
     }
 
-    // Detect field start: line begins with any known field
+
     let matchedOriginalField = null;
 
     for (const [norm, original] of fieldSet.entries()) {
@@ -56,7 +55,7 @@ export function parseSections(flatText, fields) {
     }
   }
 
-  // Final cleanup: normalize whitespace
+  // remove whitespace
   for (const key of Object.keys(sections)) {
     sections[key] = sections[key]
       .split('\n')

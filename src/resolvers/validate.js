@@ -3,7 +3,7 @@ function isBlank(val) {
   const s = String(val).trim();
   if (!s) return true;
 
-  // Treat these as “empty” for intake purposes
+  // Treat these as empty for validation purposes
   const emptyTokens = new Set(['n/a', 'na', 'none', 'null', 'unknown', 'tbd']);
   return emptyTokens.has(s.toLowerCase());
 }
@@ -31,8 +31,6 @@ export function validateSections(sections, template) {
 
   // 2) Conditional required fields
   for (const rule of conditionalRequired) {
-    // rule.when(sections) -> boolean
-    // rule.require -> field name
     if (typeof rule.when === 'function' && rule.when(sections)) {
       if (isBlank(sections[rule.require])) {
         errors.push(rule.message || `Missing required section: ${rule.require}`);
@@ -52,7 +50,7 @@ export function validateSections(sections, template) {
     if (!ok) warnings.push(rule.message || 'Warning rule triggered');
   }
 
-  // 5) Common built-in checks
+  // 5) URL validation or common checks
   if (!isBlank(sections['Related Links'])) {
     const urls = extractUrls(sections['Related Links']);
     if (!urls.length) {
@@ -60,13 +58,13 @@ export function validateSections(sections, template) {
     }
   }
 
-  // Example warning: Steps have no numbering
+  // Steps have no numbering
   if (!isBlank(sections['Steps to Reproduce'])) {
     const hasNumberedStep = /^\s*\d+\.\s+/m.test(sections['Steps to Reproduce']);
     if (!hasNumberedStep) warnings.push('Steps to Reproduce does not appear to include numbered steps');
   }
 
-  // Example warning: Expected == Actual
+  // Expected == Actual
   if (!isBlank(sections['Expected Result']) && !isBlank(sections['Actual Result'])) {
     if (sections['Expected Result'].trim() === sections['Actual Result'].trim()) {
       warnings.push('Expected Result and Actual Result are identical');
