@@ -7,9 +7,13 @@ modules:
       render: native
       title: TSE Ticket Triage
       icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+      displayConditions:
+        issueType: Bug
+        projectKey: CS
+        jiraExpression: user.groups.includes("TSE Team")
   function:
     - key: resolver
-      handler: index.handler
+      handler: resolvers/index.handler
 resources:
   - key: main
     path: src/frontend/App.jsx

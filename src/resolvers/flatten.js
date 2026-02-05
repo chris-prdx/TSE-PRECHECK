@@ -58,8 +58,7 @@ export function flattenAdf(nodes) {
 
   (nodes || []).forEach(walk);
 
-  // whitespace removal
-  console.log("OUTPUT", output)
+  // whitespace normalization
   return output
     .replace(/\r\n/g, '\n')
     .replace(/[ \t]+\n/g, '\n')   // trim trailing whitespace per line

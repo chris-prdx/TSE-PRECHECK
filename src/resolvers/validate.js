@@ -14,6 +14,7 @@ function extractUrls(text) {
 }
 
 export function validateSections(sections, template) {
+
   const errors = [];
   const warnings = [];
 
