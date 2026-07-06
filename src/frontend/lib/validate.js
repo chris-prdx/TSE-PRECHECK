@@ -71,6 +71,5 @@ export function validateSections(sections, template) {
       warnings.push('Expected Result and Actual Result are identical');
     }
   }
-  console.log("VALIDATION", { errors, warnings });
   return { errors, warnings };
 }

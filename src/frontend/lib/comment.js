@@ -1,3 +1,4 @@
+import { invoke } from '@forge/bridge';
 
 const ICONS = {
   pass: '✅',
@@ -43,16 +44,20 @@ export function buildComment({ errors = [], warnings = [] }) {
   return { version: 1, type: 'doc', content };
 }
 
-export async function  pushComment(comment, issueKey) {
-   await api.asApp().requestJira(
-    route`/rest/api/3/issue/${issueKey}/comment`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ body: comment }),
-    }
-  );
+export async function pushComment(comment, issueKey) {
+  await invoke('postComment', { comment, issueKey });
 }
+
+// export async function  pushComment(comment, issueKey) {
+//    await api.asApp().requestJira(
+//     route`/rest/api/3/issue/${issueKey}/comment`,
+//     {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ body: comment }),
+//     }
+//   );
+// }
 
 function bulletList(items = []) {
   return {

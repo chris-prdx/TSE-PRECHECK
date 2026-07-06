@@ -12,17 +12,21 @@ modules:
         projectKey: CS
         jiraExpression: user.groups.includes("TSE Team")
   function:
-    - key: resolver            
-      handler: resolvers/index.handler 
+    - key: resolver
+      handler: resolvers/index.handler
 resources:
   - key: main
     path: src/frontend/App.jsx
+    # - key: onCreate
+    #   handler: index.onCreate
 app:
   runtime:
     name: nodejs22.x
     memoryMB: 256
     architecture: arm64
   id: ari:cloud:ecosystem::app/def4f801-effa-4044-be6a-ae75ae93f23b
+
+
 permissions:
   scopes:
     - read:jira-work
