@@ -31,7 +31,6 @@ resolver.define('updateLabels', async ({ payload }) => {
   if (update.length === 0) {
     return { ok: true };
   }
-
   const response = await api.asApp().requestJira(
     route`/rest/api/3/issue/${issueKey}`,
     {
@@ -41,6 +40,7 @@ resolver.define('updateLabels', async ({ payload }) => {
     }
   );
   if (!response.ok) {
+    const body = await response.text();
     throw new Error(`Failed to update labels: ${response.status}`);
   }
   return { ok: true };

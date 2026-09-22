@@ -17,6 +17,7 @@ import { flattenAdf } from './lib/flatten';
 import { parseSections } from './lib/parse';
 import { validateSections } from './lib/validate';
 import { buildComment, pushComment } from './lib/comment';
+import { RUN_LABELS, applyRunLabel } from './lib/label';
 
 const App = () => {
   const context = useProductContext();
@@ -61,11 +62,20 @@ const App = () => {
       const comment = buildComment({ errors, warnings });
       await pushComment(comment, issueKey);
 
+      // 4) Label the issue to record that the app ran to completion. 
+      await applyRunLabel(issueKey, RUN_LABELS.SUCCESS);
+
       setResult({ errors, warnings });
       setStatus('done');
     } catch (err) {
       setStatus('error');
       setErrorMessage(err.message || 'Something went wrong running the check.');
+      if (issueKey) {
+        try {
+          await applyRunLabel(issueKey, RUN_LABELS.FAILED);
+        } catch (labelErr) {
+        }
+      }
     }
   };
 
