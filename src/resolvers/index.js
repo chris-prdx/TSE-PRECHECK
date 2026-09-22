@@ -19,4 +19,31 @@ resolver.define('postComment', async ({ payload }) => {
   return { ok: true };
 });
 
+// Applies/removes labels on the issue to record the outcome of the intake
+resolver.define('updateLabels', async ({ payload }) => {
+  const { issueKey, addLabels = [], removeLabels = [] } = payload;
+
+  const update = [
+    ...addLabels.map((label) => ({ add: label })),
+    ...removeLabels.map((label) => ({ remove: label })),
+  ];
+
+  if (update.length === 0) {
+    return { ok: true };
+  }
+
+  const response = await api.asApp().requestJira(
+    route`/rest/api/3/issue/${issueKey}`,
+    {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ update: { labels: update } }),
+    }
+  );
+  if (!response.ok) {
+    throw new Error(`Failed to update labels: ${response.status}`);
+  }
+  return { ok: true };
+});
+
 export const handler = resolver.getDefinitions();
